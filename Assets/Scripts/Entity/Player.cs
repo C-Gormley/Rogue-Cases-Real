@@ -56,7 +56,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
         if (IsValidPosition(futurePosition))
         {
-            Action.MovementAction(GetComponent<Entity>(), roundedDirection);
+            moveKeyHeld = Action.BumpAction(GetComponent<Entity>(), roundedDirection);
         }
     }
 
