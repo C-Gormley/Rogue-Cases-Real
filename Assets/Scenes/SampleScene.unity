@@ -670,10 +670,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c3468f96cc63e48bbbbce387840c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 0.015
+  baseTime: 0.075
+  delayTime: 0
   isPlayerTurn: 1
-  entitytNum: 0
+  actorNum: 0
   entities: []
+  actors: []
+  deadSprite: {fileID: 21300000, guid: 19f57b184d13781449391db5a52c9277, type: 3}
 --- !u!4 &1882396627
 Transform:
   m_ObjectHideFlags: 0

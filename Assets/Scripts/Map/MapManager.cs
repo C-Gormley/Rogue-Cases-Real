@@ -29,7 +29,11 @@ public class MapManager : MonoBehaviour
     [Header("Features")]
     [SerializeField] private List<RectangularRoom> rooms = new List<RectangularRoom>();
     [SerializeField] private List<Vector3Int> visibleTiles = new List<Vector3Int>();
-    [SerializeField] private Dictionary<Vector3Int, TileData> tiles = new Dictionary<Vector3Int, TileData>();
+    private Dictionary<Vector3Int, TileData> tiles = new Dictionary<Vector3Int, TileData>();
+    private Dictionary<Vector2Int, Node> nodes = new Dictionary<Vector2Int, Node>();
+
+    public int Width { get => width; }
+    public int Height { get => height; }
 
     public TileBase FloorTile { get => floorTile; }
     public TileBase WallTile { get => wallTile; }
@@ -37,8 +41,9 @@ public class MapManager : MonoBehaviour
     public Tilemap FloorMap { get => floorMap; }
     public Tilemap ObstacleMap { get => obstacleMap; }
     public Tilemap FogMap { get => fogMap; }
-
     public List<RectangularRoom> Rooms { get => rooms; }
+    public Dictionary<Vector2Int, Node> Nodes { get => nodes; set => nodes = value; }
+
 
     private void Awake()
     {
@@ -95,11 +100,11 @@ public class MapManager : MonoBehaviour
     {
         foreach(Vector3Int pos in visibleTiles)
         {
-            if (!tiles[pos].isExplored)
+            if (!tiles[pos].IsExplored)
             {
-                tiles[pos].isExplored = true; ;
+                tiles[pos].IsExplored = true; ;
             }
-            tiles[pos].isVisible = false;
+            tiles[pos].IsVisible = false;
             fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
         }
 
@@ -107,7 +112,7 @@ public class MapManager : MonoBehaviour
 
         foreach(Vector3Int pos in playerFOV)
         {
-            tiles[pos].isVisible = true;
+            tiles[pos].IsVisible = true;
             fogMap.SetColor(pos, Color.clear);
             visibleTiles.Add(pos);
         }

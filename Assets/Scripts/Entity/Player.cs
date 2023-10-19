@@ -43,7 +43,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
     private void FixedUpdate()
     {
-        if (GameManager.instance.IsPlayerTurn && moveKeyHeld)
+        if (GameManager.instance.IsPlayerTurn && moveKeyHeld && GetComponent<Actor>().IsAlive)
         {
             MovePlayer();
         }
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
         if (IsValidPosition(futurePosition))
         {
-            moveKeyHeld = Action.BumpAction(GetComponent<Entity>(), roundedDirection);
+            moveKeyHeld = Action.BumpAction(GetComponent<Actor>(), roundedDirection);
         }
     }
 

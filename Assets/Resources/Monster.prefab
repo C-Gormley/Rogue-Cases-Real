@@ -10,7 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5601389351938793295}
   - component: {fileID: 7593432217573962052}
-  - component: {fileID: 7971295774657240126}
+  - component: {fileID: 8620704234511187924}
+  - component: {fileID: -1829849160495717817}
+  - component: {fileID: -6623806478526474880}
+  - component: {fileID: -3039802252769052252}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -73,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 605729d30524a7d4296c444d31d5d604, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -85,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7971295774657240126
+--- !u!114 &8620704234511187924
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,10 +97,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 4143123962214149258}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3c056778352182468f79e8df3f19568, type: 3}
+  m_Script: {fileID: 11500000, guid: bc2446821c2e50640879ddeb82d09b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSentient: 1
   blocksMovement: 1
+  isAlive: 1
   fieldOfViewRange: 8
   fieldOfView: []
+  aI: {fileID: -3039802252769052252}
+--- !u!114 &-1829849160495717817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4143123962214149258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 414a167623f9c654e8eef59c25100f47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 10
+  hp: 10
+  defense: 0
+  power: 3
+  target: {fileID: 0}
+--- !u!114 &-6623806478526474880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4143123962214149258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97f1eba31d4b874419165007d745716a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-3039802252769052252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4143123962214149258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2f2942fdb805549ad84a7507db3b03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aStar: {fileID: -6623806478526474880}
+  fighter: {fileID: -1829849160495717817}
+  isFighting: 0

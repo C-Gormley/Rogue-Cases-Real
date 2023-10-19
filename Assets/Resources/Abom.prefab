@@ -10,7 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1602673233817703997}
   - component: {fileID: 4599032575364915003}
-  - component: {fileID: 5611647998945294688}
+  - component: {fileID: 3974003281333333096}
+  - component: {fileID: 5345682294340023406}
+  - component: {fileID: -5598269419951437008}
+  - component: {fileID: -4763726524721898571}
   m_Layer: 0
   m_Name: Abom
   m_TagString: Untagged
@@ -73,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 605729d30524a7d4296c444d31d5d604, type: 3}
   m_Color: {r: 0.7830189, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -85,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5611647998945294688
+--- !u!114 &3974003281333333096
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,10 +97,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 3963741244500662666}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3c056778352182468f79e8df3f19568, type: 3}
+  m_Script: {fileID: 11500000, guid: bc2446821c2e50640879ddeb82d09b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSentient: 1
   blocksMovement: 1
+  isAlive: 1
   fieldOfViewRange: 8
   fieldOfView: []
+  aI: {fileID: -4763726524721898571}
+--- !u!114 &5345682294340023406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3963741244500662666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 414a167623f9c654e8eef59c25100f47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 16
+  hp: 16
+  defense: 1
+  power: 4
+  target: {fileID: 0}
+--- !u!114 &-5598269419951437008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3963741244500662666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97f1eba31d4b874419165007d745716a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-4763726524721898571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3963741244500662666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2f2942fdb805549ad84a7507db3b03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aStar: {fileID: -5598269419951437008}
+  fighter: {fileID: 5345682294340023406}
+  isFighting: 0
