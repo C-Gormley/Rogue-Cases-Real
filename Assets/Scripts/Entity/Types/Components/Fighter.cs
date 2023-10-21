@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,14 +6,20 @@ using UnityEngine;
 [RequireComponent(typeof(Actor))]
 sealed class Fighter : MonoBehaviour
 {
-    [SerializeField] private int maxHP, hp, defense, power;
+    [SerializeField] private int maxHp, hp, defense, power;
     [SerializeField] private Actor target;
 
     public int Hp
     {
         get => hp; set
         {
-            hp = Mathf.Max(0, Mathf.Min(value, maxHP));
+            hp = Mathf.Max(0, Mathf.Min(value, maxHp));
+
+            if (GetComponent<Player>())
+            {
+                UIManager.instance.SetHealth(hp, maxHp);
+            }
+
             if(hp == 0)
             {
                 Die();
@@ -24,15 +31,24 @@ sealed class Fighter : MonoBehaviour
     public int Power { get => power; }
     public Actor Target { get => target; set => target = value; }
 
+    private void Start()
+    {
+        if(GetComponent<Player>())
+        {
+            UIManager.instance.SetHealthMax(maxHp);
+            UIManager.instance.SetHealth(hp, maxHp);
+        }
+    }
+
     private void Die()
     {
         if (GetComponent<Player>())
         {
-            Debug.Log($"You died!");
+            UIManager.instance.AddMessage($"You died!", "#ff0000"); //Red
         }
         else
         {
-            Debug.Log($"{name} is dead!");
+            UIManager.instance.AddMessage($"{name} is dead!", "#ffa500"); // Light Orange
         }
         SpriteRenderer spriteRenderer;
         if(GetComponent<Player>())
@@ -54,6 +70,25 @@ sealed class Fighter : MonoBehaviour
         {
             GameManager.instance.RemoveActor(this.GetComponent<Actor>());
         }
+    }
+    
+    public int Heal(int amount)
+    {
+        if (hp == maxHp)
+        {
+            return 0;
+        }
+
+        int newHPValue = hp + amount;
+
+        if(newHPValue >  maxHp)
+        {
+            newHPValue = maxHp; 
+        }
+
+        int amountRecovered = newHPValue - hp;
+        Hp = newHPValue;
+        return amountRecovered;
     }
 
 }

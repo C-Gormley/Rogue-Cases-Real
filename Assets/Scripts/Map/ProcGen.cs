@@ -6,7 +6,7 @@ using static UnityEditor.PlayerSettings;
 sealed class ProcGen
 {
     
-    public void GenerateDungeon(int mapWidth, int mapHeight, int roomMaxSize, int roomMinSize, int maxRooms, int maxMonstersPerRoom, List<RectangularRoom> rooms)
+    public void GenerateDungeon(int mapWidth, int mapHeight, int roomMaxSize, int roomMinSize, int maxRooms, int maxMonstersPerRoom, int maxItemsPerRoom, List<RectangularRoom> rooms)
     {
         for (int roomNum = 0; roomNum < maxRooms; roomNum++)
         {
@@ -45,11 +45,8 @@ sealed class ProcGen
                 TunnelBetween(rooms[rooms.Count - 1], newRoom);
                 
             }
-            else
-            {
-                
-            }
-            PlaceActors(newRoom, maxMonstersPerRoom);
+
+            PlaceEntities(newRoom, maxMonstersPerRoom, maxItemsPerRoom);
             rooms.Add(newRoom);
         }
         //The first room, where the player starts
@@ -116,9 +113,10 @@ sealed class ProcGen
         MapManager.instance.FloorMap.SetTile(pos, MapManager.instance.FloorTile);
     }
 
-    private void PlaceActors(RectangularRoom newRoom, int maximumMonsters)
+    private void PlaceEntities(RectangularRoom newRoom, int maximumMonsters, int maximumItems)
     {
         int numberOfMonsters = Random.Range(0, maximumMonsters + 1);
+        int numberOfItems = Random.Range(0, maximumItems + 1);
         for (int monster = 0; monster < numberOfMonsters;)
         {
             int x = Random.Range(newRoom.X, newRoom.X + newRoom.Width);
@@ -147,6 +145,47 @@ sealed class ProcGen
             }
             monster++;
         }
+
+        for (int item = 0; item < numberOfItems;)
+        {
+            int x = Random.Range(newRoom.X, newRoom.X + newRoom.Width);
+            int y = Random.Range(newRoom.Y, newRoom.Y + newRoom.Height);
+            if (x == newRoom.X || x == newRoom.X + newRoom.Width - 1 || y == newRoom.Y || y == newRoom.Y + newRoom.Height - 1)
+            {
+                continue;
+            }
+            for (int entity = 0; entity < GameManager.instance.Entities.Count; entity++)
+            {
+                Vector3Int pos = MapManager.instance.FloorMap.WorldToCell(GameManager.instance.Entities[entity].transform.position);
+
+                if (pos.x == x && pos.y == y)
+                {
+                    return;
+                }
+            }
+
+
+            float randomValue = Random.value;
+            
+            switch (randomValue)
+            {
+                case 0.7f:
+                    MapManager.instance.CreateEntity("Potion of Health", new Vector2(x, y));
+                    break;
+                case 0.8f:
+                    MapManager.instance.CreateEntity("Lightning Scroll", new Vector2(x, y));
+                    break;
+                case 0.9f:
+                    MapManager.instance.CreateEntity("Confusion Scroll", new Vector2(x, y));
+                    break;
+                default:
+                    MapManager.instance.CreateEntity("Fireball Scroll", new Vector2(x, y));
+                    break;
+
+            }
+            item++;
+        }
+
     }
 
 }

@@ -44,3 +44,9 @@ TagManager:
   - name: Fog
     uniqueID: 3815360009
     locked: 0
+  - name: Entity
+    uniqueID: 1850749053
+    locked: 0
+  - name: UI
+    uniqueID: 466555695
+    locked: 0

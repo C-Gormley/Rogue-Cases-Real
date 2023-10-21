@@ -15,6 +15,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int roomMinSize = 6;
     [SerializeField] private int maxRooms = 30;
     [SerializeField] private int maxMonstersPerRoom = 2;
+    [SerializeField] private int maxItemsPerRoom = 2;
 
     [Header("Tiles")]
     [SerializeField] private TileBase floorTile;
@@ -61,7 +62,7 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         ProcGen procGen = new ProcGen();
-        procGen.GenerateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, maxMonstersPerRoom, rooms);
+        procGen.GenerateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, maxMonstersPerRoom, maxItemsPerRoom, rooms);
 
         AddTileMapToDictionary(floorMap);
         AddTileMapToDictionary(obstacleMap);
@@ -88,6 +89,18 @@ public class MapManager : MonoBehaviour
                 break;
             case "Abom":
                 Instantiate(Resources.Load<GameObject>("Abom"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Abom";
+                break;
+            case "Potion of Health":
+                Instantiate(Resources.Load<GameObject>("Potion of Health"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Potion of Health";
+                break;
+            case "Fireball Scroll":
+                Instantiate(Resources.Load<GameObject>("Fireball Scroll"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Fireball Scroll";
+                break;
+            case "Confusion Scroll":
+                Instantiate(Resources.Load<GameObject>("Confusion Scroll"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Confusion Scroll";
+                break;
+            case "Lightning Scroll":
+                Instantiate(Resources.Load<GameObject>("Lightning Scroll"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Lightning Scroll";
                 break;
             default:
                 Debug.Log("Entity not found");
@@ -163,4 +176,13 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public bool IsValidPosition(Vector3 futurePosition)
+    {
+        Vector3Int gridPosition = floorMap.WorldToCell(futurePosition);
+        if (!InBounds(gridPosition.x, gridPosition.y) || obstacleMap.HasTile(gridPosition))
+        {
+            return false;
+        }
+        return true;
+    }
 }

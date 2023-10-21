@@ -47,13 +47,13 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (actors[actorNum].GetComponent<HostileEnemy>())
+            if (actors[actorNum].AI != null)
             {
-                actors[actorNum].GetComponent<HostileEnemy>().RunAI();
+                actors[actorNum].AI.RunAI();
             }
             else
             {
-                Action.SkipAction();
+                Action.WaitAction();
             }
         }
     }
@@ -85,11 +85,17 @@ public class GameManager : MonoBehaviour
 
     public void AddEntity(Entity entity)
     {
+        if (!entity.gameObject.activeSelf)
+        {
+            entity.gameObject.SetActive(true);
+        }
+
         entities.Add(entity);
     }
 
     public void RemoveEntity(Entity entity)
     {
+        entity.gameObject.SetActive(false);
         entities.Remove(entity);
     }
 
@@ -111,7 +117,7 @@ public class GameManager : MonoBehaviour
         delayTime = SetTime();
     }
 
-    public Actor GetBlockingActorAtLocation(Vector3 location)
+    public Actor GetActorAtLocation(Vector3 location)
     {
         foreach(Actor actor in Actors)
         {
