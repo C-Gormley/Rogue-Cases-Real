@@ -257,7 +257,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         //Take away 1 to account for the center
         int radius = (int)targetObject.transform.GetChild(0).localScale.x -1;
 
-        Bounds targetBounds = new Bounds(targetPosition, Vector3.one * radius * 2);
+        Bounds targetBounds = new Bounds(targetPosition, Vector3.one * radius); // add back * 2
         List<Actor> targets = new List<Actor>();
 
         foreach(Actor target in GameManager.instance.Actors)
@@ -268,7 +268,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
             }
         }
 
-        if(targets.Count > 0)
+        if(targets.Count == 0)
         {
             UIManager.instance.AddMessage("There are no targets in the radius", "#FFFFFF");
             return null;

@@ -14,7 +14,7 @@ public class Fireball : Consumable
     {
         consumer.GetComponent<Inventory>().SelectedConsumable = this;
         consumer.GetComponent<Player>().ToggleTargetMode(true, radius);
-        UIManager.instance.AddMessage("Burn 'em all", "#63FFFF");
+        UIManager.instance.AddMessage($"Burn 'em all", "#63FFFF");
         return false;
     }
 
@@ -22,7 +22,7 @@ public class Fireball : Consumable
     {
         foreach(Actor target in targets)
         {
-            UIManager.instance.AddMessage($"The {target.name} has it's 'flesh' scortched for {damage} damage.", "#FF0000");
+            UIManager.instance.AddMessage($"The {target.name} has it's flesh scortched for {damage} damage.", "#FF0000");
             target.GetComponent<Fighter>().Hp -= damage;
         }
 
