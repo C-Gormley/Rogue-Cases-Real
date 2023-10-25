@@ -19,12 +19,9 @@ public class Action
             }
 
             Item item = GameManager.instance.Entities[i].GetComponent<Item>();
-            item.transform.SetParent(actor.transform);
-            actor.Inventory.Items.Add(item);
+            actor.Inventory.Add(item);
 
             UIManager.instance.AddMessage($"You picked up the {item.name}!", "#FFFFFF");
-
-            GameManager.instance.RemoveEntity(item);
             GameManager.instance.EndTurn();
         }
     }

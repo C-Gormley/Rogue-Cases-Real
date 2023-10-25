@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Headers;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
@@ -28,9 +30,9 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Tilemap fogMap;
 
     [Header("Features")]
-    [SerializeField] private List<RectangularRoom> rooms = new List<RectangularRoom>();
-    [SerializeField] private List<Vector3Int> visibleTiles = new List<Vector3Int>();
-    private Dictionary<Vector3Int, TileData> tiles = new Dictionary<Vector3Int, TileData>();
+    [SerializeField] private List<RectangularRoom> rooms;
+    [SerializeField] private List<Vector3Int> visibleTiles;
+    private Dictionary<Vector3Int, TileData> tiles;
     private Dictionary<Vector2Int, Node> nodes = new Dictionary<Vector2Int, Node>();
 
     public int Width { get => width; }
@@ -43,6 +45,7 @@ public class MapManager : MonoBehaviour
     public Tilemap ObstacleMap { get => obstacleMap; }
     public Tilemap FogMap { get => fogMap; }
     public List<RectangularRoom> Rooms { get => rooms; }
+    public List<Vector3Int> VisibleTiles { get => visibleTiles; }
     public Dictionary<Vector2Int, Node> Nodes { get => nodes; set => nodes = value; }
 
 
@@ -56,57 +59,51 @@ public class MapManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SceneState sceneState = SaveManager.instance.Save.Scenes.Find(x => x.FloorNumber == SaveManager.instance.CurrentFloor);
+
+        if (sceneState is not null)
+        {
+            LoadState(sceneState.MapState);
+        }
+        else
+        {
+            GenerateDungeon();
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        //Camera.main.transform.position = new Vector3(40, 20.25f, -10);
+        Camera.main.orthographicSize = 7;
+    }
+
+    public void GenerateDungeon()
+    {
+        rooms = new List<RectangularRoom>();
+        tiles = new Dictionary<Vector3Int, TileData>();
+        visibleTiles = new List<Vector3Int>();
+
         ProcGen procGen = new ProcGen();
         procGen.GenerateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, maxMonstersPerRoom, maxItemsPerRoom, rooms);
 
         AddTileMapToDictionary(floorMap);
         AddTileMapToDictionary(obstacleMap);
-
         SetupFogMap();
-
-        //Camera.main.transform.position = new Vector3(40, 20.25f, -10);
-        Camera.main.orthographicSize = 7;
     }
 
     public bool InBounds(int x, int y) => 0 <= x && x < width && 0 <= y && y < height;
 
-    public void CreateEntity(string entity, Vector2 position)
+    public GameObject CreateEntity(string entity, Vector2 position)
     {
-        switch (entity)
-        {
-            case "Player":
-                Instantiate(Resources.Load<GameObject>("Player"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Player";
-                Camera.main.transform.position = new Vector3(position.x, position.y, -10);
-                Camera.main.transform.parent = FindObjectOfType<Player>().transform;
-                break;
-            case "Monster":
-                Instantiate(Resources.Load<GameObject>("Monster"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Monster";
-                break;
-            case "Abom":
-                Instantiate(Resources.Load<GameObject>("Abom"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Abom";
-                break;
-            case "Potion of Health":
-                Instantiate(Resources.Load<GameObject>("Potion of Health"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Potion of Health";
-                break;
-            case "Fireball Scroll":
-                Instantiate(Resources.Load<GameObject>("Fireball Scroll"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Fireball Scroll";
-                break;
-            case "Confusion Scroll":
-                Instantiate(Resources.Load<GameObject>("Confusion Scroll"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Confusion Scroll";
-                break;
-            case "Lightning Scroll":
-                Instantiate(Resources.Load<GameObject>("Lightning Scroll"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Lightning Scroll";
-                break;
-            default:
-                Debug.Log("Entity not found");
-                break;
-        }
-        
+        GameObject entityObject = Instantiate(Resources.Load<GameObject>($"{entity}"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity);
+        entityObject.name = entity;
+        return entityObject;
     }
 
     public void UpdateFogMap(List<Vector3Int> playerFOV)
@@ -162,7 +159,11 @@ public class MapManager : MonoBehaviour
                 continue;
             }
 
-            TileData tile = new TileData();
+            TileData tile = new TileData(
+                name: tilemap.GetTile(pos).name,
+                isExplored: false,
+                isVisible: false
+            );
             tiles.Add(pos, tile);
         }
     }
@@ -173,6 +174,15 @@ public class MapManager : MonoBehaviour
         {
             fogMap.SetTile(pos, fogTile);
             fogMap.SetTileFlags(pos, TileFlags.None);
+
+            if (tiles[pos].IsExplored)
+            {
+                fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
+            }
+            else
+            {
+                fogMap.SetColor(pos, Color.white);
+            }
         }
     }
 
@@ -184,5 +194,45 @@ public class MapManager : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    public MapState SaveState() => new MapState(tiles, rooms);
+
+    public void LoadState(MapState mapState)
+    {
+        rooms = mapState.StoredRooms;
+        tiles = mapState.StoredTiles.ToDictionary(x => new Vector3Int((int)x.Key.x, (int)x.Key.y, (int)x.Key.z), x => x.Value);
+        if (visibleTiles.Count > 0)
+        {
+            visibleTiles.Clear();
+        }
+
+        foreach (Vector3Int pos in tiles.Keys)
+        {
+            if (tiles[pos].Name == floorTile.name)
+            {
+                floorMap.SetTile(pos, floorTile);
+            }
+            else if (tiles[pos].Name == wallTile.name)
+            {
+                obstacleMap.SetTile(pos, wallTile);
+            }
+        }
+        SetupFogMap();
+    }
+}
+
+[System.Serializable]
+public class MapState
+{
+    [SerializeField] private Dictionary<Vector3, TileData> storedTiles;
+    [SerializeField] private List<RectangularRoom> storedRooms;
+    public Dictionary<Vector3, TileData> StoredTiles { get => storedTiles; set => storedTiles = value; }
+    public List<RectangularRoom> StoredRooms { get => storedRooms; set => storedRooms = value; }
+
+    public MapState(Dictionary<Vector3Int, TileData> tiles, List<RectangularRoom> rooms)
+    {
+        storedTiles = tiles.ToDictionary(x => (Vector3)x.Key, x => x.Value);
+        storedRooms = rooms;
     }
 }

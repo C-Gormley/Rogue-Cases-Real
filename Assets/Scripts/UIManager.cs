@@ -30,11 +30,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private bool isDropMenuOpen = false; //Read-only
     [SerializeField] private GameObject dropMenu;
     [SerializeField] private GameObject dropMenuContent;
+    [Header("Escape Menu UI")]
+    [SerializeField] private bool isEscapeMenuOpen = false;
+    [SerializeField] private GameObject escapeMenu;
 
     public bool IsMenuOpen { get => isMenuOpen; }
     public bool IsMessageHistoryOpen { get => isMessageHistoryOpen; }
     public bool IsInventoryOpen {  get => isInventoryOpen; }
     public bool IsDropMenuOpen { get => isDropMenuOpen; }
+    public bool IsEscapeMenuOpen { get => isEscapeMenuOpen; }
 
     private void Awake()
     {
@@ -67,21 +71,23 @@ public class UIManager : MonoBehaviour
         {
             isMenuOpen = !isMenuOpen;
 
-            if (isMessageHistoryOpen)
+            switch (true)
             {
-                ToggleMessageHistory();
+                case bool _ when isMessageHistoryOpen:
+                    ToggleMessageHistory();
+                    break;
+                case bool _ when isInventoryOpen:
+                    ToggleInventory();
+                    break;
+                case bool _ when isDropMenuOpen:
+                    ToggleDropMenu();
+                    break;
+                case bool _ when isEscapeMenuOpen:
+                    ToggleEscapeMenu();
+                    break;
+                default:
+                    break;
             }
-
-            if (isInventoryOpen)
-            {
-                ToggleInventory();
-            }
-
-            if (isDropMenuOpen)
-            {
-                ToggleDropMenu();
-            }
-            return;
         }
     }
 
@@ -116,6 +122,34 @@ public class UIManager : MonoBehaviour
             UpdateMenu(actor, dropMenuContent);
         }
     }
+
+    public void ToggleEscapeMenu()
+    {
+        escapeMenu.SetActive(!escapeMenu.activeSelf);
+        isMenuOpen = escapeMenu.activeSelf;
+        isEscapeMenuOpen = escapeMenu.activeSelf;
+        if (isMenuOpen)
+        {
+            eventSystem.SetSelectedGameObject(escapeMenu.transform.GetChild(0).gameObject);
+        }
+    }
+
+    public void Save()
+    {
+        SaveManager.instance.SaveGame();
+    }
+
+    public void Load()
+    {
+        SaveManager.instance.LoadGame();
+        ToggleMenu();
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
 
     public void AddMessage(string newMessage, string colorHex)
     {
