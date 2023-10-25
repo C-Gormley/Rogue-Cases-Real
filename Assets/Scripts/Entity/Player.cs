@@ -17,6 +17,9 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
     private void OnEnable()
     {
+        Camera.main.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -10);
+        Camera.main.transform.SetParent(gameObject.transform);
+        
         controls.Player.SetCallbacks(this);
         controls.Player.Enable();
     }
