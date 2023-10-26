@@ -11,12 +11,18 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
     [SerializeField] private bool moveKeyDown;
     [SerializeField] private bool targetMode;
     [SerializeField] private bool isSingleTarget;
+    [SerializeField] private GameObject cam;
     [SerializeField] private GameObject targetObject;
 
     private void Awake() => controls = new Controls();
 
     private void OnEnable()
     {
+        if(Camera.main == null)
+        {
+            Instantiate(cam);
+        }
+        Camera.main.orthographicSize = 7;
         Camera.main.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -10);
         Camera.main.transform.SetParent(gameObject.transform);
         

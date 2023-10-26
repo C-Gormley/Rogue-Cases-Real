@@ -390,6 +390,7 @@ MonoBehaviour:
   moveKeyDown: 0
   targetMode: 0
   isSingleTarget: 0
+  cam: {fileID: 6112261078395513115, guid: 2ebcbe8e3cead894396e628660f83b31, type: 3}
   targetObject: {fileID: 3272185428666326451}
 --- !u!114 &4061339070996684145
 MonoBehaviour:
@@ -409,6 +410,7 @@ MonoBehaviour:
   fieldOfView: []
   aI: {fileID: 0}
   inventory: {fileID: 556936409920441785}
+  fighter: {fileID: 7485922018399746316}
 --- !u!114 &7485922018399746316
 MonoBehaviour:
   m_ObjectHideFlags: 0

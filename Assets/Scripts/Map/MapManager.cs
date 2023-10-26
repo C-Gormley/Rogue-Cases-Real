@@ -76,13 +76,6 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Camera.main.transform.position = new Vector3(40, 20.25f, -10);
-        Camera.main.orthographicSize = 7;
-    }
-
     public void GenerateDungeon()
     {
         rooms = new List<RectangularRoom>();
