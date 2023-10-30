@@ -6,7 +6,7 @@ using static UnityEditor.PlayerSettings;
 sealed class ProcGen
 {
     
-    public void GenerateDungeon(int mapWidth, int mapHeight, int roomMaxSize, int roomMinSize, int maxRooms, int maxMonstersPerRoom, int maxItemsPerRoom, List<RectangularRoom> rooms)
+    public void GenerateDungeon(int mapWidth, int mapHeight, int roomMaxSize, int roomMinSize, int maxRooms, int maxMonstersPerRoom, int maxItemsPerRoom, List<RectangularRoom> rooms, bool isNewGame)
     {
         for (int roomNum = 0; roomNum < maxRooms; roomNum++)
         {
@@ -49,8 +49,27 @@ sealed class ProcGen
             PlaceEntities(newRoom, maxMonstersPerRoom, maxItemsPerRoom);
             rooms.Add(newRoom);
         }
-        //The first room, where the player starts
-        MapManager.instance.CreateEntity("Player", rooms[0].Center());
+        //Add the stairs to the last room.
+        MapManager.instance.FloorMap.SetTile((Vector3Int)rooms[rooms.Count - 1].RandomPoint(), MapManager.instance.DownStairsTile);
+
+        //Add the player to the first room.
+        Vector3Int playerPos = (Vector3Int)rooms[0].RandomPoint();
+
+        while (GameManager.instance.GetActorAtLocation(playerPos) is not null)
+        {
+            playerPos = (Vector3Int)rooms[0].RandomPoint();
+        }
+
+        MapManager.instance.FloorMap.SetTile(playerPos, MapManager.instance.UpStairsTile);
+
+        if (!isNewGame)
+        {
+            GameManager.instance.Actors[0].transform.position = new Vector3(playerPos.x + 0.5f, playerPos.y + 0.5f, 0);
+        }
+        else
+        {
+            MapManager.instance.CreateEntity("Player", (Vector2Int)playerPos);
+        }
     }
 
     public void TunnelBetween(RectangularRoom oldRoom, RectangularRoom newRoom)
@@ -169,13 +188,13 @@ sealed class ProcGen
             
             switch (randomValue)
             {
-                case 0.7f:
+                case float randomvalue when randomvalue <= 1.0f && randomvalue >= 0.8f:
                     MapManager.instance.CreateEntity("Potion of Health", new Vector2(x, y));
                     break;
-                case 0.8f:
+                case float randomvalue when randomvalue <= 0.7f && randomvalue >= 0.5f:
                     MapManager.instance.CreateEntity("Lightning Scroll", new Vector2(x, y));
                     break;
-                case 0.9f:
+                case float randomvalue when randomvalue <= 0.4f && randomvalue >= 0.2f:
                     MapManager.instance.CreateEntity("Confusion Scroll", new Vector2(x, y));
                     break;
                 default:

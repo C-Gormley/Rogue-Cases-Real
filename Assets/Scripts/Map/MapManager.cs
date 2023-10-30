@@ -4,6 +4,8 @@ using System.Net.Http.Headers;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
+using UnityEditor.PackageManager.Requests;
+using System.Diagnostics.Eventing.Reader;
 
 public class MapManager : MonoBehaviour
 {
@@ -23,6 +25,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] private TileBase floorTile;
     [SerializeField] private TileBase wallTile;
     [SerializeField] private TileBase fogTile;
+    [SerializeField] private TileBase upStairsTile;
+    [SerializeField] private TileBase downStairsTile;
 
     [Header("Tilemaps")]
     [SerializeField] private Tilemap floorMap;
@@ -40,6 +44,8 @@ public class MapManager : MonoBehaviour
 
     public TileBase FloorTile { get => floorTile; }
     public TileBase WallTile { get => wallTile; }
+    public TileBase UpStairsTile { get => upStairsTile; }
+    public TileBase DownStairsTile { get => downStairsTile; }
 
     public Tilemap FloorMap { get => floorMap; }
     public Tilemap ObstacleMap { get => obstacleMap; }
@@ -72,22 +78,37 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            GenerateDungeon();
+            GenerateDungeon(true);
         }
     }
 
-    public void GenerateDungeon()
+    public void GenerateDungeon(bool isNewGame = false)
     {
+        if (floorMap.cellBounds.size.x > 0)
+        {
+            Reset();
+        }
+        else
+        {
+            rooms = new List<RectangularRoom>();
+            tiles = new Dictionary<Vector3Int, TileData>();
+            visibleTiles = new List<Vector3Int>();
+        }
         rooms = new List<RectangularRoom>();
         tiles = new Dictionary<Vector3Int, TileData>();
         visibleTiles = new List<Vector3Int>();
 
         ProcGen procGen = new ProcGen();
-        procGen.GenerateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, maxMonstersPerRoom, maxItemsPerRoom, rooms);
+        procGen.GenerateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, maxMonstersPerRoom, maxItemsPerRoom, rooms, isNewGame);
 
         AddTileMapToDictionary(floorMap);
         AddTileMapToDictionary(obstacleMap);
         SetupFogMap();
+
+        if (!isNewGame)
+        {
+            GameManager.instance.RefreshPlayer();
+        }
     }
 
     public bool InBounds(int x, int y) => 0 <= x && x < width && 0 <= y && y < height;
@@ -189,10 +210,26 @@ public class MapManager : MonoBehaviour
         return true;
     }
 
+    private void Reset()
+    {
+        rooms.Clear();
+        tiles.Clear();
+        visibleTiles.Clear();
+        nodes.Clear();
+
+        floorMap.ClearAllTiles();
+        obstacleMap.ClearAllTiles();
+        fogMap.ClearAllTiles();
+    }
+
     public MapState SaveState() => new MapState(tiles, rooms);
 
     public void LoadState(MapState mapState)
     {
+        if(floorMap.cellBounds.size.x > 0)
+        {
+            Reset();
+        }
         rooms = mapState.StoredRooms;
         tiles = mapState.StoredTiles.ToDictionary(x => new Vector3Int((int)x.Key.x, (int)x.Key.y, (int)x.Key.z), x => x.Value);
         if (visibleTiles.Count > 0)
@@ -209,6 +246,14 @@ public class MapManager : MonoBehaviour
             else if (tiles[pos].Name == wallTile.name)
             {
                 obstacleMap.SetTile(pos, wallTile);
+            }
+            else if (tiles[pos].Name == upStairsTile.name)
+            {
+                floorMap.SetTile(pos, upStairsTile);
+            }
+            else if (tiles[pos].Name == downStairsTile.name)
+            {
+                floorMap.SetTile(pos, downStairsTile);
             }
         }
         SetupFogMap();

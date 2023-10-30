@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private bool isMenuOpen = false;
+    [SerializeField] private TextMeshProUGUI dungeonFloorText;
 
     [Header("Health UI")]
     [SerializeField] private Slider hpSlider;
@@ -33,12 +34,20 @@ public class UIManager : MonoBehaviour
     [Header("Escape Menu UI")]
     [SerializeField] private bool isEscapeMenuOpen = false;
     [SerializeField] private GameObject escapeMenu;
+    [Header("Character Information Menu UI")]
+    [SerializeField] private bool isCharacterInformationMenuOpen = false; //Read-only
+    [SerializeField] private GameObject characterInformationMenu;
+    [Header("Level Up Menu UI")]
+    [SerializeField] private bool isLevelUpMenuOpen = false; //Read-only
+    [SerializeField] private GameObject levelUpMenu;
+    [SerializeField] private GameObject levelUpMenuContent;
 
     public bool IsMenuOpen { get => isMenuOpen; }
     public bool IsMessageHistoryOpen { get => isMessageHistoryOpen; }
     public bool IsInventoryOpen {  get => isInventoryOpen; }
     public bool IsDropMenuOpen { get => isDropMenuOpen; }
     public bool IsEscapeMenuOpen { get => isEscapeMenuOpen; }
+    public bool IsCharacterInformationMenuOpen {  get => isCharacterInformationMenuOpen; }
 
     private void Awake()
     {
@@ -52,7 +61,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void Start() => AddMessage("Hello and welcome player", "#0da2ff"); //Light blue
+    private void Start()
+    {
+        SetDungeonFloorText(SaveManager.instance.CurrentFloor);
+
+        if (SaveManager.instance.Save.SavedFloor is 0)
+        {
+            AddMessage("Welcome player.", "#0da2ff"); //Light blue
+        }
+        else
+        {
+            AddMessage("Welcome back, player.", "#0da2ff"); //Light blue
+        }
+    }
 
     public void SetHealthMax(int maxHp)
     {
@@ -63,6 +84,11 @@ public class UIManager : MonoBehaviour
     {
         hpSlider.value = hp;
         hpSliderText.text = $"HP: {hp}/{maxHp}";
+    }
+
+    public void SetDungeonFloorText(int floor)
+    {
+        dungeonFloorText.text = $"Dungeon Floor: {floor}";
     }
 
     public void ToggleMenu()
@@ -85,6 +111,9 @@ public class UIManager : MonoBehaviour
                 case bool _ when isEscapeMenuOpen:
                     ToggleEscapeMenu();
                     break;
+                case bool _ when isCharacterInformationMenuOpen:
+                    ToggleCharacterInformationMenu();
+                    break;
                 default:
                     break;
             }
@@ -94,15 +123,14 @@ public class UIManager : MonoBehaviour
 
     public void ToggleMessageHistory()
     {
-        messageHistory.SetActive(!messageHistory.activeSelf);
-        isMessageHistoryOpen = messageHistory.activeSelf;
+        isMessageHistoryOpen = !isMessageHistoryOpen;
+        SetBooleans(messageHistory, isMessageHistoryOpen);
     }
 
     public void ToggleInventory(Actor actor = null)
     {
-        inventory.SetActive(!inventory.activeSelf);
-        isMenuOpen = inventory.activeSelf;
-        isInventoryOpen = inventory.activeSelf;
+        isInventoryOpen = !isInventoryOpen;
+        SetBooleans(inventory, isInventoryOpen);
 
         if (isMenuOpen)
         {
@@ -110,14 +138,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
     public void ToggleDropMenu(Actor actor = null)
     {
-        dropMenu.SetActive(!dropMenu.activeSelf);
-        isMenuOpen=dropMenu.activeSelf;
-        isDropMenuOpen = dropMenu.activeSelf;
+        isDropMenuOpen = !isDropMenuOpen;
+        SetBooleans(dropMenu, isDropMenuOpen);
 
-        if(isMenuOpen)
+        if (isMenuOpen)
         {
             UpdateMenu(actor, dropMenuContent);
         }
@@ -125,23 +151,84 @@ public class UIManager : MonoBehaviour
 
     public void ToggleEscapeMenu()
     {
-        escapeMenu.SetActive(!escapeMenu.activeSelf);
-        isMenuOpen = escapeMenu.activeSelf;
-        isEscapeMenuOpen = escapeMenu.activeSelf;
-        if (isMenuOpen)
+        isEscapeMenuOpen = !isEscapeMenuOpen;
+        SetBooleans(escapeMenu, isEscapeMenuOpen);
+
+        eventSystem.SetSelectedGameObject(escapeMenu.transform.GetChild(0).gameObject);
+    }
+
+    public void ToggleLevelUpMenu(Actor actor)
+    {
+        isLevelUpMenuOpen = !isLevelUpMenuOpen;
+        SetBooleans(levelUpMenu, isLevelUpMenuOpen);
+
+        GameObject constitutionButton = levelUpMenuContent.transform.GetChild(0).gameObject;
+        GameObject strengthButton = levelUpMenuContent.transform.GetChild(1).gameObject;
+        GameObject agilityButton = levelUpMenuContent.transform.GetChild(2).gameObject;
+
+        constitutionButton.GetComponent<TextMeshProUGUI>().text = $"a) Constitution (+20 HP, from {actor.GetComponent<Fighter>().MaxHp})";
+        strengthButton.GetComponent<TextMeshProUGUI>().text = $"b) Strength (+1 attack, from {actor.GetComponent<Fighter>().Power})";
+        agilityButton.GetComponent<TextMeshProUGUI>().text = $"c) Agility (+1 defense, from {actor.GetComponent<Fighter>().Defense})";
+
+        foreach (Transform child in levelUpMenuContent.transform)
         {
-            eventSystem.SetSelectedGameObject(escapeMenu.transform.GetChild(0).gameObject);
+            child.GetComponent<Button>().onClick.RemoveAllListeners();
+
+            child.GetComponent<Button>().onClick.AddListener(() => {
+                if (constitutionButton == child.gameObject)
+                {
+                    actor.GetComponent<Level>().IncreaseMaxHp();
+                }
+                else if (strengthButton == child.gameObject)
+                {
+                    actor.GetComponent<Level>().IncreasePower();
+                }
+                else if (agilityButton == child.gameObject)
+                {
+                    actor.GetComponent<Level>().IncreaseDefense();
+                }
+                else
+                {
+                    Debug.LogError("No button found!");
+                }
+                ToggleLevelUpMenu(actor);
+                SetHealthMax(actor.GetComponent<Fighter>().MaxHp);
+            });
+        }
+
+        eventSystem.SetSelectedGameObject(levelUpMenuContent.transform.GetChild(0).gameObject);
+    }
+
+    public void ToggleCharacterInformationMenu(Actor actor = null)
+    {
+        isCharacterInformationMenuOpen = !isCharacterInformationMenuOpen;
+        SetBooleans(characterInformationMenu, isCharacterInformationMenuOpen);
+
+        if (actor is not null)
+        {
+            characterInformationMenu.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = $"Level: {actor.GetComponent<Level>().CurrentLevel}";
+            characterInformationMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"XP: {actor.GetComponent<Level>().CurrentXp}";
+            characterInformationMenu.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = $"XP for next level: {actor.GetComponent<Level>().XpToNextLevel}";
+            characterInformationMenu.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = $"Attack: {actor.GetComponent<Fighter>().Power}";
+            characterInformationMenu.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = $"Defense: {actor.GetComponent<Fighter>().Defense}";
         }
     }
 
+    private void SetBooleans(GameObject menu, bool menuBool)
+    {
+        isMenuOpen = menuBool;
+        menu.SetActive(menuBool);
+    }
     public void Save()
     {
-        SaveManager.instance.SaveGame();
+        SaveManager.instance.SaveGame(false);
+        AddMessage("Time slows as you catch your breath. The world will remember your place in it.", "#0da2ff");
     }
 
     public void Load()
     {
         SaveManager.instance.LoadGame();
+        AddMessage("You find yourself where you once were. A dream perhaps?", "#0da2ff");
         ToggleMenu();
     }
 

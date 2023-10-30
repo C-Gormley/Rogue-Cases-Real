@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -1829849160495717817}
   - component: {fileID: -6623806478526474880}
   - component: {fileID: -3039802252769052252}
+  - component: {fileID: -5246643673566172823}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1850749053
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 605729d30524a7d4296c444d31d5d604, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -106,6 +107,8 @@ MonoBehaviour:
   fieldOfView: []
   aI: {fileID: -3039802252769052252}
   inventory: {fileID: 0}
+  fighter: {fileID: -1829849160495717817}
+  level: {fileID: -5246643673566172823}
 --- !u!114 &-1829849160495717817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414a167623f9c654e8eef59c25100f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 0
+  maxHp: 10
   hp: 10
   defense: 0
   power: 3
@@ -150,3 +153,21 @@ MonoBehaviour:
   aStar: {fileID: -6623806478526474880}
   fighter: {fileID: -1829849160495717817}
   isFighting: 0
+--- !u!114 &-5246643673566172823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4143123962214149258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4ff72e60fe4d984b95fee5b2d174eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevel: 1
+  currentXp: 0
+  xpToNextLevel: 350
+  levelUpBase: 200
+  levelUpFactor: 150
+  xpGiven: 30
