@@ -169,7 +169,7 @@ public class UIManager : MonoBehaviour
         constitutionButton.GetComponent<TextMeshProUGUI>().text = $"a) Constitution (+20 HP, from {actor.GetComponent<Fighter>().MaxHp})";
         strengthButton.GetComponent<TextMeshProUGUI>().text = $"b) Strength (+1 attack, from {actor.GetComponent<Fighter>().Power})";
         agilityButton.GetComponent<TextMeshProUGUI>().text = $"c) Agility (+1 defense, from {actor.GetComponent<Fighter>().Defense})";
-
+        
         foreach (Transform child in levelUpMenuContent.transform)
         {
             child.GetComponent<Button>().onClick.RemoveAllListeners();
@@ -197,6 +197,7 @@ public class UIManager : MonoBehaviour
         }
 
         eventSystem.SetSelectedGameObject(levelUpMenuContent.transform.GetChild(0).gameObject);
+        
     }
 
     public void ToggleCharacterInformationMenu(Actor actor = null)

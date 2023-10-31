@@ -10,7 +10,7 @@ public class SaveManager : MonoBehaviour
     public static SaveManager instance;
 
     [SerializeField] private int currentFloor = 0;
-    [SerializeField] private string saveFileName = "saveThe.koala";
+    [SerializeField] private string saveFileName = "saveThe.game";
     [SerializeField] private SaveData save = new SaveData();
 
     public int CurrentFloor { get => currentFloor; set => currentFloor = value; }
@@ -55,11 +55,12 @@ public class SaveManager : MonoBehaviour
             AddScene(SaveState());
         }
 
-        if (!tempSave) return;
-
-        string path = Path.Combine(Application.persistentDataPath, saveFileName);
-        byte[] saveJson = SerializationUtility.SerializeValue(save, DataFormat.JSON); //Serialize the state to JSON
-        File.WriteAllBytes(path, saveJson); //Save the state to a file
+        if (!tempSave)
+        {
+            string path = Path.Combine(Application.persistentDataPath, saveFileName);
+            byte[] saveJson = SerializationUtility.SerializeValue(save, DataFormat.JSON); //Serialize the state to JSON
+            File.WriteAllBytes(path, saveJson); //Save the state to a file
+        }
     }
 
     public void LoadGame()
