@@ -242,7 +242,7 @@ SpriteRenderer:
   m_SortingLayerID: 1850749053
   m_SortingLayer: 2
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: b7b8dc6a89ff0d947a35fcd5ba91623e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f05df940ee66a944d922ab1d66a38ed5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -352,6 +352,7 @@ GameObject:
   - component: {fileID: 7485922018399746316}
   - component: {fileID: 556936409920441785}
   - component: {fileID: 2595295740902254015}
+  - component: {fileID: 8751552171620376721}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -411,6 +412,7 @@ MonoBehaviour:
   fieldOfView: []
   aI: {fileID: 0}
   inventory: {fileID: 556936409920441785}
+  equipment: {fileID: 8751552171620376721}
   fighter: {fileID: 7485922018399746316}
   level: {fileID: 2595295740902254015}
 --- !u!114 &7485922018399746316
@@ -427,8 +429,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 30
   hp: 30
-  defense: 2
-  power: 5
+  baseDefense: 1
+  basePower: 2
   target: {fileID: 0}
 --- !u!114 &556936409920441785
 MonoBehaviour:
@@ -463,3 +465,17 @@ MonoBehaviour:
   levelUpBase: 200
   levelUpFactor: 150
   xpGiven: 0
+--- !u!114 &8751552171620376721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6456315795995321295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8c1f4082ec54c64eb98ddad488187ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
+  armor: {fileID: 0}

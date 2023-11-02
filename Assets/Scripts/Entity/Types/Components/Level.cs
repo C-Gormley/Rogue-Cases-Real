@@ -39,26 +39,26 @@ public class Level : MonoBehaviour
 
     public void IncreaseMaxHp(int amount = 20)
     {
-        GetComponent<Actor>().Fighter.MaxHp += amount;
-        GetComponent<Actor>().Fighter.Hp += amount;
+        GetComponent<Fighter>().MaxHp += amount;
+        GetComponent<Fighter>().Hp += amount;
 
-        UIManager.instance.AddMessage($"Your health improves!", "#00FF00"); //Green
+        UIManager.instance.AddMessage($"Your physical health strengthens.", "#00FF00"); //Green
         IncreaseLevel();
     }
 
     public void IncreasePower(int amount = 1)
     {
-        GetComponent<Actor>().Fighter.Power += amount;
+        GetComponent<Fighter>().BasePower += amount;
 
-        UIManager.instance.AddMessage($"You feel stronger!", "#00FF00"); //Green
+        UIManager.instance.AddMessage($"You feel the weight on your shoulders begin to ease.", "#00FF00"); //Green
         IncreaseLevel();
     }
 
     public void IncreaseDefense(int amount = 1)
     {
-        GetComponent<Actor>().Fighter.Defense += amount;
+        GetComponent<Fighter>().BaseDefense += amount;
 
-        UIManager.instance.AddMessage($"Your movements are getting swifter!", "#00FF00"); //Green
+        UIManager.instance.AddMessage($"You're begining to feel more agile.", "#00FF00"); //Green
         IncreaseLevel();
     }
 

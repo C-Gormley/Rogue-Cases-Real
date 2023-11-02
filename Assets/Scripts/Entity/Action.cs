@@ -64,6 +64,10 @@ public class Action
 
     static public void DropAction(Actor actor, Item item)
     {
+        if (actor.Equipment.ItemIsEquipped(item))
+        {
+            actor.Equipment.ToggleEquip(item);
+        }
         actor.Inventory.Drop(item);
 
         UIManager.instance.ToggleDropMenu();
@@ -75,7 +79,7 @@ public class Action
     {
         bool itemUsed = false;
 
-        if (item.GetComponent<Consumable>())
+        if (item.Consumable != null)
         {
             itemUsed = item.GetComponent<Consumable>().Activate(consumer);
         }
@@ -106,7 +110,7 @@ public class Action
 
     static public void MeleeAction(Actor actor, Actor target)
     {
-        int damage = actor.GetComponent<Fighter>().Power - target.GetComponent<Fighter>().Defense;
+        int damage = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
         string attackDesc = $"{actor.name} attacks {target.name}";
 
         string colorHex = "";
@@ -145,6 +149,20 @@ public class Action
         GameManager.instance.EndTurn();
     }
 
+    static public void EquipAction(Actor actor, Item item)
+    {
+        if (item.Equippable is null)
+        {
+            UIManager.instance.AddMessage($"The {item.name} cannot be equipped.", "#808080");
+            return;
+        }
+
+        actor.Equipment.ToggleEquip(item);
+
+        UIManager.instance.ToggleInventory();
+        GameManager.instance.EndTurn();
+    }
+
     static public void CastAction(Actor consumer, Actor target, Consumable consumable)
     {
         bool castSuccess = consumable.Cast(consumer, target);
@@ -163,6 +181,8 @@ public class Action
             GameManager.instance.EndTurn();
         }
     }
+
+
 
 
 }
