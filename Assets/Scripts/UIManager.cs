@@ -37,6 +37,19 @@ public class UIManager : MonoBehaviour
     [Header("Character Information Menu UI")]
     [SerializeField] private bool isCharacterInformationMenuOpen = false; //Read-only
     [SerializeField] private GameObject characterInformationMenu;
+    [SerializeField] private GameObject limbInformationMenu;
+    [SerializeField] private Slider leftArmSlider;
+    [SerializeField] private Slider rightArmSlider;
+    [SerializeField] private Slider leftLegSlider;
+    [SerializeField] private Slider rightLegSlider;
+    [SerializeField] private Slider torsoSlider;
+    [SerializeField] private Slider headSlider;
+    [SerializeField] private TextMeshProUGUI leftArmText;
+    [SerializeField] private TextMeshProUGUI rightArmText;
+    [SerializeField] private TextMeshProUGUI leftLegText;
+    [SerializeField] private TextMeshProUGUI rightLegText;
+    [SerializeField] private TextMeshProUGUI torsoText;
+    [SerializeField] private TextMeshProUGUI headText;
     [Header("Level Up Menu UI")]
     [SerializeField] private bool isLevelUpMenuOpen = false; //Read-only
     [SerializeField] private GameObject levelUpMenu;
@@ -84,6 +97,62 @@ public class UIManager : MonoBehaviour
     {
         hpSlider.value = hp;
         hpSliderText.text = $"HP: {hp}/{maxHp}";
+    }
+
+    public void SetLimbMaxHealth(int limbMaxHp, BodyPart limb)
+    {
+        switch (limb.limb)
+        {
+            case BodyPart.LimbType.LeftArm:
+                leftArmSlider.maxValue = limbMaxHp;
+                break;
+            case BodyPart.LimbType.RightArm:
+                rightArmSlider.maxValue= limbMaxHp;
+                break;
+            case BodyPart.LimbType.LeftLeg:
+                leftLegSlider.maxValue = limbMaxHp;
+                break;
+            case BodyPart.LimbType.RightLeg:
+                rightLegSlider.maxValue = limbMaxHp;
+                break;
+            case BodyPart.LimbType.Torso:
+                torsoSlider.maxValue = limbMaxHp;
+                break;
+            case BodyPart.LimbType.Head:
+                headSlider.maxValue = limbMaxHp;
+                break;
+        }
+    }
+
+    public void SetLimbHealth(int limbHP, int limbMaxHP, BodyPart limb)
+    {
+        switch (limb.limb)
+        {
+            case BodyPart.LimbType.LeftArm:
+                leftArmSlider.value = limbHP;
+                leftArmText.text = $"LArm: {limbHP}/{limbMaxHP}";
+                break;
+            case BodyPart.LimbType.RightArm:
+                rightArmSlider.value = limbHP;
+                rightArmText.text = $"RArm: {limbHP}/{limbMaxHP}";
+                break;
+            case BodyPart.LimbType.LeftLeg:
+                leftLegSlider.value = limbHP;
+                leftLegText.text = $"LLeg: {limbHP}/{limbMaxHP}";
+                break;
+            case BodyPart.LimbType.RightLeg:
+                rightLegSlider.value = limbHP;
+                rightLegText.text = $"RLeg: {limbHP}/{limbMaxHP}";
+                break;
+            case BodyPart.LimbType.Torso:
+                torsoSlider.value = limbHP;
+                torsoText.text = $"Torso: {limbHP}/{limbMaxHP}";
+                break;
+            case BodyPart.LimbType.Head:
+                headSlider.value = limbHP;
+                headText.text = $"Head: {limbHP}/{limbMaxHP}";
+                break;
+        }
     }
 
     public void SetDungeonFloorText(int floor)
@@ -213,6 +282,7 @@ public class UIManager : MonoBehaviour
             characterInformationMenu.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = $"Attack: {actor.GetComponent<Fighter>().Power()}";
             characterInformationMenu.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = $"Defense: {actor.GetComponent<Fighter>().Defense()}";
         }
+
     }
 
     private void SetBooleans(GameObject menu, bool menuBool)

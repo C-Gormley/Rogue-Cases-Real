@@ -42,12 +42,12 @@ public class Fighter : MonoBehaviour
     public int BasePower { get => basePower; set => basePower = value; }
     public Actor Target { get => target; set => target = value; }
 
-    public int Power()
+    public virtual int Power()
     {
         return basePower + PowerBonus();
     }
 
-    public int Defense()
+    public virtual int Defense()
     {
         return baseDefense + DefenseBonus();
     }

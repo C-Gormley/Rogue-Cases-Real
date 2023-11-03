@@ -124,15 +124,30 @@ public class Action
             colorHex = "#d1a3a4"; // light red
         }
 
+
         if (damage > 0)
         {
             UIManager.instance.AddMessage($"{attackDesc} for {damage} hit points.", colorHex);
             target.GetComponent<Fighter>().Hp -= damage;
+            if (target.GetComponent<PFighter>())
+            {
+                UIManager.instance.SetHealth(target.GetComponent<PFighter>().Hp, target.GetComponent<PFighter>().MaxHp);
+                BodyPart targetLimb = target.GetComponent<PFighter>().BodyParts[Random.Range(0, target.GetComponent<PFighter>().BodyParts.Count)];
+                int limbDamage = damage / 2;
+                if (limbDamage <= 0)
+                {
+                    limbDamage = 1;
+                }
+                targetLimb.LimbHP -= limbDamage;
+                UIManager.instance.SetLimbHealth(targetLimb.LimbHP, targetLimb.LimbMaxHP, targetLimb);
+            }
         }
         else
         {
             UIManager.instance.AddMessage($"{attackDesc} but does no damage.", colorHex);
         }
+
+
         GameManager.instance.EndTurn();
     }
 

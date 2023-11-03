@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int actorNum = 0;
     [SerializeField] private List<Entity> entities;
     [SerializeField] private List<Actor> actors;
+    [SerializeField] private GameObject Player;
     [Header("Death")]
     [SerializeField] private Sprite deadSprite;
 
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        Player = GameObject.Find("Player");
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
