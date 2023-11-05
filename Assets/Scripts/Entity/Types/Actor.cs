@@ -11,6 +11,7 @@ public class Actor : Entity
     [SerializeField] private Inventory inventory;
     [SerializeField] private Equipment equipment;
     [SerializeField] private Fighter fighter;
+    [SerializeField] private PFighter pFighter;
     [SerializeField] private Level level;
 
     AdamMilVisibility algorithm;
@@ -21,6 +22,7 @@ public class Actor : Entity
     public Equipment Equipment { get => equipment; }
     public AI AI {get => aI; set => aI = value; }
     public Fighter Fighter { get => fighter; set => fighter = value; }
+    public PFighter PFighter { get=> pFighter; set => pFighter = value; }
     public Level Level { get => level; set => level = value; }
 
     private void OnValidate()
@@ -101,6 +103,7 @@ public class Actor : Entity
     position: transform.position,
     currentAI: aI != null ? AI.SaveState() : null,
     fighterState: fighter != null ? fighter.SaveState() : null,
+    pFighterState: pFighter != null ? pFighter.PSaveState() : null,
     levelState: level != null && GetComponent<Player>() ? level.SaveState() : null
   );
 
@@ -142,6 +145,10 @@ public class Actor : Entity
         {
             level.LoadState(state.LevelState);
         }
+        if(state.PFighterState != null)
+        {
+            pFighter.LoadState(state.PFighterState);
+        }
     }
 }
 
@@ -151,18 +158,21 @@ public class ActorState : EntityState
     [SerializeField] private bool isAlive;
     [SerializeField] private AIState currentAI;
     [SerializeField] private FighterState fighterState;
+    [SerializeField] private PFighterState pFighterState;
     [SerializeField] private LevelState levelState;
     public bool IsAlive { get => isAlive; set => isAlive = value; }
     public AIState CurrentAI { get => currentAI; set => currentAI = value; }
     public FighterState FighterState { get => fighterState; set => fighterState = value; }
+    public PFighterState PFighterState { get => pFighterState; set=> pFighterState = value; }
     public LevelState LevelState { get => levelState; set => levelState = value; }
 
     public ActorState(EntityType type = EntityType.Actor, string name = "", bool blocksMovement = false, bool isVisible = false, Vector3 position = new Vector3(),
-     bool isAlive = true, AIState currentAI = null, FighterState fighterState = null, LevelState levelState = null) : base(type, name, blocksMovement, isVisible, position)
+     bool isAlive = true, AIState currentAI = null, FighterState fighterState = null, PFighterState pFighterState = null, LevelState levelState = null) : base(type, name, blocksMovement, isVisible, position)
     {
         this.isAlive = isAlive;
         this.currentAI = currentAI;
         this.fighterState = fighterState;
+        this.pFighterState = pFighterState;
         this.levelState = levelState;
     }
 }

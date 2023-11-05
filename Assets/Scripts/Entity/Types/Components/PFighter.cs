@@ -1,5 +1,7 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using UnityEngine;
 
 public class PFighter : Fighter
@@ -65,4 +67,47 @@ public class PFighter : Fighter
         }
     }
 
+
+    public PFighterState PSaveState()
+    {
+        PFighterState pFighterState = new PFighterState(bodyParts: bodyParts.ConvertAll(x => x.SaveState()));
+
+        return pFighterState;
+    }
+
+    public void LoadState(PFighterState state)
+    {
+        //bodyParts = state.BodyParts;
+        int limbNumber = 0;
+        foreach(BodyPartState partState in state.BodyParts)
+        {
+            bodyParts.Add(GetComponentInChildren<BodyPart>());
+            bodyParts[limbNumber].LoadState(state.BodyParts[limbNumber]);
+            limbNumber++;
+        }
+    }
+
+    /*
+    private IEnumerator LoadPartStates(List<BodyPartState> partStates)
+    {
+        int partState = 0;
+        yield return new WaitForEndOfFrame();
+
+        while (partState < partStates.BodyParts.Count)
+        {
+
+        }
+    }
+    */
+}
+
+public class PFighterState
+{
+    [SerializeField]private List<BodyPartState> bodyParts;
+
+    public List<BodyPartState> BodyParts { get => bodyParts; set => bodyParts = value;}
+    public PFighterState(List<BodyPartState> bodyParts)
+    {
+        this.bodyParts = bodyParts;
+    }
 }

@@ -46,6 +46,13 @@ public class BodyPart : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        UIManager.instance.SetLimbMaxHealth(limbMaxHP, this);
+        UIManager.instance.SetLimbHealth(limbHP, limbMaxHP, this);
+
+    }
+
     public BodyPartState SaveState() => new BodyPartState(
         limbHP: limbHP,
         limbMaxHP: limbMaxHP,
@@ -61,7 +68,7 @@ public class BodyPart : MonoBehaviour
 
 }
 
-//figure out how loading works and also make sure we're actually saving
+//wtf is a unityreferenceresolver
 
 public class BodyPartState
 {

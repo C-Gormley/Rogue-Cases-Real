@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 530329487643693708}
-  - component: {fileID: 4271021716594167616}
+  - component: {fileID: 1848974367288274239}
   m_Layer: 0
   m_Name: Right Arm
   m_TagString: Untagged
@@ -116,7 +116,7 @@ Transform:
   m_Father: {fileID: 6119681512654373794}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4271021716594167616
+--- !u!114 &1848974367288274239
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1042639482823743264}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 586cc08a3bfc540408d6fa46e082bccb, type: 3}
+  m_Script: {fileID: 11500000, guid: 157d44e9ffbeb6c4ab23174afe9b15df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   limbHP: 6
@@ -311,7 +311,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1485474042997268063}
-  - component: {fileID: 3060203325537722326}
+  - component: {fileID: 9122760775974664366}
   m_Layer: 0
   m_Name: Right Leg
   m_TagString: Untagged
@@ -334,7 +334,7 @@ Transform:
   m_Father: {fileID: 6119681512654373794}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3060203325537722326
+--- !u!114 &9122760775974664366
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2306044121580127272}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 586cc08a3bfc540408d6fa46e082bccb, type: 3}
+  m_Script: {fileID: 11500000, guid: 157d44e9ffbeb6c4ab23174afe9b15df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   limbHP: 6
@@ -360,7 +360,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7231964698546773706}
-  - component: {fileID: 2983835911579014811}
+  - component: {fileID: 6852080018997852797}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -383,7 +383,7 @@ Transform:
   m_Father: {fileID: 6119681512654373794}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2983835911579014811
+--- !u!114 &6852080018997852797
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2356943136922142016}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 586cc08a3bfc540408d6fa46e082bccb, type: 3}
+  m_Script: {fileID: 11500000, guid: 157d44e9ffbeb6c4ab23174afe9b15df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   limbHP: 6
@@ -409,7 +409,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4619232115037209969}
-  - component: {fileID: 3373580176621017661}
+  - component: {fileID: 3970884061928935427}
   m_Layer: 0
   m_Name: Left Arm
   m_TagString: Untagged
@@ -432,7 +432,7 @@ Transform:
   m_Father: {fileID: 6119681512654373794}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3373580176621017661
+--- !u!114 &3970884061928935427
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -441,7 +441,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2386341603970732740}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 586cc08a3bfc540408d6fa46e082bccb, type: 3}
+  m_Script: {fileID: 11500000, guid: 157d44e9ffbeb6c4ab23174afe9b15df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   limbHP: 6
@@ -543,7 +543,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3426719427722492730}
-  - component: {fileID: 5198394318613170822}
+  - component: {fileID: 7323465772673528110}
   m_Layer: 0
   m_Name: Left Leg
   m_TagString: Untagged
@@ -566,7 +566,7 @@ Transform:
   m_Father: {fileID: 6119681512654373794}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5198394318613170822
+--- !u!114 &7323465772673528110
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -575,7 +575,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4067109356200176817}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 586cc08a3bfc540408d6fa46e082bccb, type: 3}
+  m_Script: {fileID: 11500000, guid: 157d44e9ffbeb6c4ab23174afe9b15df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   limbHP: 6
@@ -697,6 +697,7 @@ MonoBehaviour:
   inventory: {fileID: 556936409920441785}
   equipment: {fileID: 8751552171620376721}
   fighter: {fileID: 5845703274493020367}
+  pFighter: {fileID: 5845703274493020367}
   level: {fileID: 2595295740902254015}
 --- !u!114 &5845703274493020367
 MonoBehaviour:
@@ -716,12 +717,12 @@ MonoBehaviour:
   basePower: 2
   target: {fileID: 0}
   bodyParts:
-  - {fileID: 3373580176621017661}
-  - {fileID: 4271021716594167616}
-  - {fileID: 5198394318613170822}
-  - {fileID: 3060203325537722326}
-  - {fileID: 1120016575812865938}
-  - {fileID: 2983835911579014811}
+  - {fileID: 3970884061928935427}
+  - {fileID: 1848974367288274239}
+  - {fileID: 7323465772673528110}
+  - {fileID: 9122760775974664366}
+  - {fileID: 3092387999960509554}
+  - {fileID: 6852080018997852797}
 --- !u!114 &556936409920441785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -778,7 +779,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6477537016321213725}
-  - component: {fileID: 1120016575812865938}
+  - component: {fileID: 3092387999960509554}
   m_Layer: 0
   m_Name: Torso
   m_TagString: Untagged
@@ -801,7 +802,7 @@ Transform:
   m_Father: {fileID: 6119681512654373794}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1120016575812865938
+--- !u!114 &3092387999960509554
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -810,7 +811,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6972778491729085595}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 586cc08a3bfc540408d6fa46e082bccb, type: 3}
+  m_Script: {fileID: 11500000, guid: 157d44e9ffbeb6c4ab23174afe9b15df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   limbHP: 12

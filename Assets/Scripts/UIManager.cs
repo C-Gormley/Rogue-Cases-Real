@@ -282,7 +282,7 @@ public class UIManager : MonoBehaviour
             characterInformationMenu.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = $"Attack: {actor.GetComponent<Fighter>().Power()}";
             characterInformationMenu.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = $"Defense: {actor.GetComponent<Fighter>().Defense()}";
         }
-
+        
     }
 
     private void SetBooleans(GameObject menu, bool menuBool)

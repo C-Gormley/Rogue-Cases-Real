@@ -139,6 +139,7 @@ public class Action
                     limbDamage = 1;
                 }
                 targetLimb.LimbHP -= limbDamage;
+                UIManager.instance.AddMessage($"{targetLimb.name} takes {limbDamage} damage.", colorHex);
                 UIManager.instance.SetLimbHealth(targetLimb.LimbHP, targetLimb.LimbMaxHP, targetLimb);
             }
         }
