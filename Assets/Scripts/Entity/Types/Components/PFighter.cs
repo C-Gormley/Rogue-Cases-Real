@@ -67,6 +67,25 @@ public class PFighter : Fighter
         }
     }
 
+    public int AllLimbHeal(int amount)
+    {
+        int newLimbHPValue = 0;
+        int amountRecovered = 0;
+        foreach (BodyPart part in BodyParts)
+        {
+
+            newLimbHPValue = part.LimbHP + amount;
+            if(newLimbHPValue > part.LimbMaxHP)
+            {
+                newLimbHPValue = part.LimbMaxHP;
+            }
+
+            amountRecovered = newLimbHPValue - part.LimbHP;
+            part.Heal(newLimbHPValue);
+        }
+        return amountRecovered;
+    }
+
 
     public PFighterState PSaveState()
     {
@@ -77,7 +96,6 @@ public class PFighter : Fighter
 
     public void LoadState(PFighterState state)
     {
-        //bodyParts = state.BodyParts;
         int limbNumber = 0;
         foreach(BodyPartState partState in state.BodyParts)
         {
@@ -87,18 +105,6 @@ public class PFighter : Fighter
         }
     }
 
-    /*
-    private IEnumerator LoadPartStates(List<BodyPartState> partStates)
-    {
-        int partState = 0;
-        yield return new WaitForEndOfFrame();
-
-        while (partState < partStates.BodyParts.Count)
-        {
-
-        }
-    }
-    */
 }
 
 public class PFighterState

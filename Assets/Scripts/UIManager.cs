@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+//using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour
 {
@@ -50,6 +51,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rightLegText;
     [SerializeField] private TextMeshProUGUI torsoText;
     [SerializeField] private TextMeshProUGUI headText;
+    [Header("Recovery Screen Menu UI")]
+    [SerializeField] private bool isRecoveryScreenOpen;
+    [SerializeField] private int recoveryAmount = 0;
+    [SerializeField] private Actor actor;
+    [SerializeField] private GameObject recoveryScreenMenu;
+    [SerializeField] private GameObject recoveryScreenContent;
     [Header("Level Up Menu UI")]
     [SerializeField] private bool isLevelUpMenuOpen = false; //Read-only
     [SerializeField] private GameObject levelUpMenu;
@@ -283,6 +290,43 @@ public class UIManager : MonoBehaviour
             characterInformationMenu.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = $"Defense: {actor.GetComponent<Fighter>().Defense()}";
         }
         
+    }
+
+    public void ToggleRecoveryScreenMenu(List<BodyPart> bodyParts, Actor consumer, int healAmount)
+    {
+        isRecoveryScreenOpen = !isRecoveryScreenOpen;
+        SetBooleans(recoveryScreenMenu, isRecoveryScreenOpen);
+
+        int limbCount = 0;
+        foreach (BodyPart part in bodyParts)
+        {
+            recoveryScreenContent.transform.GetChild(limbCount).GetComponentInChildren<TextMeshProUGUI>().text = $"{part.limb.ToString()}: {part.LimbHP}/{part.LimbMaxHP}";
+            recoveryScreenContent.transform.GetChild(limbCount).GetComponent<BodyPartHolder>().heldBodyPart = part;
+            limbCount++;
+        }
+        actor = consumer;
+        recoveryAmount = healAmount;
+    }
+
+    public void HealSelectedLimb()
+    {
+        BodyPart partHealed = EventSystem.current.currentSelectedGameObject.GetComponent<BodyPartHolder>().heldBodyPart;
+
+
+        if(partHealed.LimbHP == partHealed.LimbMaxHP)
+        {
+            AddMessage($"That limb is in good health.", "#000000");
+        }
+        int newHPValue = partHealed.LimbHP + recoveryAmount;
+        if(newHPValue > partHealed.LimbMaxHP)
+        {
+            newHPValue = partHealed.LimbMaxHP;
+        }
+        int amountRecovered = newHPValue - partHealed.LimbHP;
+        partHealed.Heal(newHPValue);
+        AddMessage($"Your {EventSystem.current.currentSelectedGameObject.GetComponent<BodyPartHolder>().name} recovered {amountRecovered}", "#808080");
+
+        ToggleRecoveryScreenMenu(actor.GetComponent<PFighter>().BodyParts, actor, recoveryAmount);
     }
 
     private void SetBooleans(GameObject menu, bool menuBool)

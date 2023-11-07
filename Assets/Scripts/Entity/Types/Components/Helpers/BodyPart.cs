@@ -53,6 +53,13 @@ public class BodyPart : MonoBehaviour
 
     }
 
+    public void Heal(int healAmount)
+    {
+        limbHP = healAmount;
+        UIManager.instance.SetLimbHealth(limbHP, limbMaxHP, this);
+    }
+
+
     public BodyPartState SaveState() => new BodyPartState(
         limbHP: limbHP,
         limbMaxHP: limbMaxHP,
