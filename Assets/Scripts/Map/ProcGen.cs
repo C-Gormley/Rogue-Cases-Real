@@ -24,7 +24,7 @@ sealed class ProcGen
     };
 
     private List<Tuple<int, string, int>> itemChances = new List<Tuple<int, string, int>> {
-    new Tuple<int, string, int>(0, "Bandage", 35),
+    new Tuple<int, string, int>(0, "Hand Gun Ammo", 35),
     new Tuple<int, string, int>(0, "Potion of Health", 35),
     new Tuple<int, string, int>(2, "Confusion Scroll", 10),
     new Tuple<int, string, int>(4, "Lightning Scroll", 25), new Tuple<int, string, int>(4, "Sword", 5),
@@ -146,7 +146,7 @@ sealed class ProcGen
             GameObject player = MapManager.instance.CreateEntity("Player", (Vector2Int)playerPos);
             Actor playerActor = player.GetComponent<Actor>();
 
-            Item starterWeapon = MapManager.instance.CreateEntity("Dagger", (Vector2Int)playerPos).GetComponent<Item>();
+            Item starterWeapon = MapManager.instance.CreateEntity("HandGun", (Vector2Int)playerPos).GetComponent<Item>();
             Item starterArmor = MapManager.instance.CreateEntity("Leather Armor", (Vector2Int)playerPos).GetComponent<Item>();
 
             playerActor.Inventory.Add(starterWeapon);

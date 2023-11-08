@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviour
             actorNum++;
         }
 
+        //SaveManager.instance.SaveGame();
         StartCoroutine(TurnDelay());
     }
 

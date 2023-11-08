@@ -165,6 +165,29 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
         }
     }
 
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (GetComponent<Equipment>().Weapon.EquipmentType == EquipmentType.Firearm)
+            {
+                if (!targetMode)
+                {
+                    ToggleTargetMode(false, 1);
+                }
+                if (targetMode)
+                {
+                    Actor target = SingleTargetChecks(targetObject.transform.position);
+                    if (target != null)
+                    {
+                        Action.FireAction(GetComponent<Actor>(), target, GetComponent<Equipment>().Weapon);
+                        ToggleTargetMode(false, 1);
+                    }
+                }
+            }
+        }
+    }
+
     public void OnInfo(InputAction.CallbackContext context)
     {
         if (context.performed)

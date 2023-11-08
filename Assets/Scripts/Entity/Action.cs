@@ -110,47 +110,46 @@ public class Action
 
     static public void MeleeAction(Actor actor, Actor target)
     {
-        int damage = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
-        string attackDesc = $"{actor.name} attacks {target.name}";
+            int damage = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
+            string attackDesc = $"{actor.name} attacks {target.name}";
 
-        string colorHex = "";
+            string colorHex = "";
 
-        if (actor.GetComponent<Player>())
-        {
-            colorHex = "#ffffff"; //white
-        }
-        else
-        {
-            colorHex = "#d1a3a4"; // light red
-        }
-
-
-        if (damage > 0)
-        {
-            UIManager.instance.AddMessage($"{attackDesc} for {damage} hit points.", colorHex);
-            target.GetComponent<Fighter>().Hp -= damage;
-            if (target.GetComponent<PFighter>())
+            if (actor.GetComponent<Player>())
             {
-                UIManager.instance.SetHealth(target.GetComponent<PFighter>().Hp, target.GetComponent<PFighter>().MaxHp);
-                BodyPart targetLimb = target.GetComponent<PFighter>().BodyParts[Random.Range(0, target.GetComponent<PFighter>().BodyParts.Count)];
-                int limbDamage = damage / 2;
-                if (limbDamage <= 0)
-                {
-                    limbDamage = 1;
-                }
-                targetLimb.LimbHP -= limbDamage;
-                UIManager.instance.AddMessage($"{targetLimb.name} takes {limbDamage} damage.", colorHex);
-                UIManager.instance.SetLimbHealth(targetLimb.LimbHP, targetLimb.LimbMaxHP, targetLimb);
+                colorHex = "#ffffff"; //white
             }
-        }
-        else
-        {
-            UIManager.instance.AddMessage($"{attackDesc} but does no damage.", colorHex);
-        }
+            else
+            {
+                colorHex = "#d1a3a4"; // light red
+            }
 
 
+            if (damage > 0)
+            {
+                UIManager.instance.AddMessage($"{attackDesc} for {damage} hit points.", colorHex);
+                target.GetComponent<Fighter>().Hp -= damage;
+                if (target.GetComponent<PFighter>())
+                {
+                    UIManager.instance.SetHealth(target.GetComponent<PFighter>().Hp, target.GetComponent<PFighter>().MaxHp);
+                    BodyPart targetLimb = target.GetComponent<PFighter>().BodyParts[Random.Range(0, target.GetComponent<PFighter>().BodyParts.Count)];
+                    int limbDamage = damage / 2;
+                    if (limbDamage <= 0)
+                    {
+                        limbDamage = 1;
+                    }
+                    targetLimb.LimbHP -= limbDamage;
+                    UIManager.instance.AddMessage($"{targetLimb.name} takes {limbDamage} damage.", colorHex);
+                    UIManager.instance.SetLimbHealth(targetLimb.LimbHP, targetLimb.LimbMaxHP, targetLimb);
+                }
+            }
+            else
+            {
+                UIManager.instance.AddMessage($"{attackDesc} but does no damage.", colorHex);
+            }
         GameManager.instance.EndTurn();
     }
+
 
     static public void MovementAction(Actor actor, Vector2 direction)
     {
@@ -179,6 +178,55 @@ public class Action
         GameManager.instance.EndTurn();
     }
 
+    static public void FireAction(Actor actor, Actor target, Equippable weapon)
+    {
+        if (weapon.GetComponent<HandGun>().ammo > 0)
+        {
+            int damage = actor.GetComponent<Fighter>().Power() - target.GetComponent<Fighter>().Defense();
+            string attackDesc = $"{actor.name} attacks {target.name}";
+
+            string colorHex = "";
+
+            if (actor.GetComponent<Player>())
+            {
+                colorHex = "#ffffff"; //white
+            }
+            else
+            {
+                colorHex = "#d1a3a4"; // light red
+            }
+
+
+            if (damage > 0)
+            {
+                UIManager.instance.AddMessage($"{attackDesc} for {damage} hit points.", colorHex);
+                target.GetComponent<Fighter>().Hp -= damage;
+                if (target.GetComponent<PFighter>())
+                {
+                    UIManager.instance.SetHealth(target.GetComponent<PFighter>().Hp, target.GetComponent<PFighter>().MaxHp);
+                    BodyPart targetLimb = target.GetComponent<PFighter>().BodyParts[Random.Range(0, target.GetComponent<PFighter>().BodyParts.Count)];
+                    int limbDamage = damage / 2;
+                    if (limbDamage <= 0)
+                    {
+                        limbDamage = 1;
+                    }
+                    targetLimb.LimbHP -= limbDamage;
+                    UIManager.instance.AddMessage($"{targetLimb.name} takes {limbDamage} damage.", colorHex);
+                    UIManager.instance.SetLimbHealth(targetLimb.LimbHP, targetLimb.LimbMaxHP, targetLimb);
+                }
+            }
+            else
+            {
+                UIManager.instance.AddMessage($"{attackDesc} but does no damage.", colorHex);
+            }
+            weapon.GetComponent<HandGun>().ammo -= 1;
+        }
+        else
+        {
+            UIManager.instance.AddMessage($"'click' the gun is empty.", "#808080");
+        }
+        GameManager.instance.EndTurn();
+    }
     static public void CastAction(Actor consumer, Actor target, Consumable consumable)
     {
         bool castSuccess = consumable.Cast(consumer, target);
