@@ -56,6 +56,10 @@ public class BodyPart : MonoBehaviour
     public void Heal(int healAmount)
     {
         limbHP = healAmount;
+        if(limbHP > 0)
+        {
+            limbIsBroken = false;
+        }
         UIManager.instance.SetLimbHealth(limbHP, limbMaxHP, this);
     }
 

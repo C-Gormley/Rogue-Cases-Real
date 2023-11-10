@@ -10,6 +10,7 @@ public class HandGunRefill : Consumable
         if (consumer.Equipment.Weapon.GetComponent<HandGun>())
         {
             consumer.Equipment.Weapon.GetComponent<HandGun>().LoadGun(ammoRefill);
+            Consume(consumer);
             return true;
         }
         else { return false; }
